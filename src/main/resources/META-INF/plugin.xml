@@ -1,0 +1,38 @@
+<idea-plugin allow-bundled-update="true" url="https://www.easysoc.org">
+    <id>org.easysoc.chisel</id>
+    <name>EasySoC Chisel</name>
+    <vendor url="https://www.easysoc.org">EasySoC</vendor>
+
+    <description><![CDATA[
+    Create new Chisel project based on ProjectWizard and Templates.<br>
+    Optional primary maven repository (Central or AliRepo).<br>
+    Bringing Agile Hardware Development to the Masses.
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.java</depends>
+    <depends>org.intellij.scala</depends>
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <moduleType id="CHISEL_MODULE" implementationClass="org.easysoc.plugins.chisel.module.ChiselModuleType"/>
+        <projectTemplate projectType="CHISEL_MODULE" templatePath="projectTemplates/Empty_Chisel_Project.zip"/>
+        <projectTemplate projectType="CHISEL_MODULE" templatePath="projectTemplates/Empty_Scala_Project.zip"/>
+        <projectTemplate projectType="CHISEL_MODULE" templatePath="projectTemplates/GCD_Example_With_Chisel_Testers.zip"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+<!--        <group id="Digital" text="_Digital" description="Simple menu">-->
+<!--            <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>-->
+<!--        </group>-->
+<!--        <action id="chisel.hello" class="org.easysoc.plugins.chisel.actions.Hello" text="Hellomenu" description="HellomenuHellomenu">-->
+<!--            <add-to-group group-id="Digital" anchor="first"/>-->
+<!--        </action>-->
+    </actions>
+    <projectListeners>
+        <listener class="org.easysoc.plugins.chisel.listeners.ProjectListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </projectListeners>
+</idea-plugin>

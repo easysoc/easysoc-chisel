@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.4.20'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+}
+
+group 'org.easysoc'
+version pluginVersion
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    // version and localPath should not be specified at the same time
+    localPath "/home/itviewer/Downloads/software/chip"
+
+    // https://blog.jetbrains.com/platform/2019/06/java-functionality-extracted-as-a-plugin/
+    plugins 'java','Scala'
+    downloadSources false
+}
+
+runIde {
+    // https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime
+    jbrVersion "11_0_6b840.3"
+    ideDirectory "/home/itviewer/Downloads/software/chip"
+    jvmArgs '-Didea.platform.prefix=Chip'
+    //for jbr11
+    jvmArgs '--add-exports=java.base/jdk.internal.vm=ALL-UNNAMED','-Djdk.module.illegalAccess.silent=true'
+}
+
+patchPluginXml {
+    sinceBuild "201"
+    untilBuild "203.*"
+    changeNotes """
+      First release.<br>"""
+}
+
+// https://docs.gradle.org/current/userguide/working_with_files.html
+task deployLauncher(type: Copy) {
+    from "tools/launcher/sbt-launch.jar"
+    into "${runIde.pluginsDirectory}/${project.name}/launcher"
+}
+// buildPlugin and runIde task depend on prepareSandbox
+prepareSandbox.finalizedBy(deployLauncher)
+
+buildSearchableOptions.onlyIf { false }
+jarSearchableOptions.onlyIf { false }
+
+//prepareSandbox.onlyIf { false }
