@@ -5,6 +5,8 @@
 - Create new Chisel project based on ProjectWizard and Templates
 - Optional primary maven repository ([Central](https://repo1.maven.org/maven2) or [AliRepo](https://maven.aliyun.com/repository/central))
 
+![](https://plugins.jetbrains.com/files/14269/screenshot_21779.png)
+
 ### Build
 
 1. [learn](https://www.jetbrains.org/intellij/sdk/docs/basics/basics.html) how to develop an intellij plugin with Gradle
