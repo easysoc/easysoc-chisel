@@ -7,6 +7,8 @@
 
 ![](https://plugins.jetbrains.com/files/14269/screenshot_21779.png)
 
+![](https://plugins.jetbrains.com/files/14269/screenshot_21780.png)
+
 ### Build
 
 1. [learn](https://www.jetbrains.org/intellij/sdk/docs/basics/basics.html) how to develop an intellij plugin with Gradle
