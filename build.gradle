@@ -40,16 +40,8 @@ patchPluginXml {
     sinceBuild "201"
     untilBuild "203.*"
     changeNotes """
-      First release.<br>"""
+      remove AliRepo support.<br>"""
 }
-
-// https://docs.gradle.org/current/userguide/working_with_files.html
-task deployLauncher(type: Copy) {
-    from "tools/launcher/sbt-launch.jar"
-    into "${runIde.pluginsDirectory}/${project.name}/launcher"
-}
-// buildPlugin and runIde task depend on prepareSandbox
-prepareSandbox.finalizedBy(deployLauncher)
 
 buildSearchableOptions.onlyIf { false }
 jarSearchableOptions.onlyIf { false }

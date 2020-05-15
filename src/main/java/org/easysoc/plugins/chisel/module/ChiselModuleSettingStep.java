@@ -22,12 +22,10 @@ import java.lang.reflect.Field;
 @SuppressWarnings("unchecked")
 public class ChiselModuleSettingStep extends ModuleWizardStep {
 
-  private final String MAVEN_REPOSITORY = "easysoc.chip.primary.repository";
   private final String SBT_IMPORT = "sbt.shell.import";
   private final String SBT_BUILD = "sbt.shell.build";
   
   private final PropertiesComponent settings = PropertiesComponent.getInstance();
-  private String[] mavenRepositories = settings.getValues(MAVEN_REPOSITORY);
 
   // in ChiselModuleSettingStep.form
   private JPanel myPanel;
@@ -36,7 +34,6 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
   private WizardContext myWizardContext;
   private Properties myProperties;
 
-  private ComboBox comboMavenRepository;
   private ComboBox comboSbtVersions;
   private ComboBox comboScalaVersions;
   private ComboBox comboChiselVersions;
@@ -68,11 +65,6 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
       sbtImport = new JCheckBox("Use Sbt Shell For Import", settings.getBoolean(SBT_IMPORT,true));
       sbtBuild = new JCheckBox("Use Sbt Shell For Build", settings.getBoolean(SBT_BUILD,true));
 
-      if (mavenRepositories == null) {
-        mavenRepositories = new String[]{"Maven Central", "Aliyun Mirror"};
-      }
-      comboMavenRepository = new ComboBox(mavenRepositories);
-
       String[] scalaVersions = {"2.12.11", "2.11.12"};
       comboScalaVersions = new ComboBox(scalaVersions);
       Dimension preferSize = comboScalaVersions.getPreferredSize();
@@ -94,7 +86,6 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
 
       addSettingsComponent(sbtImport);
       addSettingsComponent(sbtBuild);
-      addSettingsField("Primary Repository:",comboMavenRepository);
       addSettingsField("Sbt Version:",comboSbtVersions);
       addSettingsField("Scala Version:",comboScalaVersions);
       labelChiselVersions = addSettingsField("Chisel Version:",comboChiselVersions);
@@ -141,12 +132,10 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
   // will call this method after click Next button,then call onStepLeaving method
   @Override
   public void updateDataModel() {
-    String primaryRepository = comboMavenRepository.getSelectedItem().toString();
 
     myProperties = new Properties();
     myProperties.setProperty("USE_SBT_IMPORT",String.valueOf(sbtImport.isSelected()));
     myProperties.setProperty("USE_SBT_BUILD",String.valueOf(sbtBuild.isSelected()));
-    myProperties.setProperty("MAVEN_REPOSITORY",primaryRepository);
     myProperties.setProperty("SBT_VERSION",comboSbtVersions.getSelectedItem().toString());
     myProperties.setProperty("SCALA_VERSION",comboScalaVersions.getSelectedItem().toString());
     myProperties.setProperty("CHISEL_VERSION",comboChiselVersions.getSelectedItem().toString());
@@ -158,12 +147,6 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
     // must be string
     settings.setValue(SBT_IMPORT, String.valueOf(sbtImport.isSelected()));
     settings.setValue(SBT_BUILD, String.valueOf(sbtBuild.isSelected()));
-    
-    if (primaryRepository.equals("Aliyun Mirror")) {
-      settings.setValues(MAVEN_REPOSITORY, new String[]{"Aliyun Mirror", "Maven Central"});
-    } else {
-      settings.setValues(MAVEN_REPOSITORY, mavenRepositories);
-    }
   }
 
   public JLabel addSettingsField(@NotNull String label, @NotNull JComponent field) {

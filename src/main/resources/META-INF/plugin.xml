@@ -5,7 +5,6 @@
 
     <description><![CDATA[
     Create new Chisel project based on ProjectWizard and Templates.<br>
-    Optional primary maven repository (Central or AliRepo).<br>
     Bringing Agile Hardware Development to the Masses.
     ]]></description>
 
