@@ -28,7 +28,7 @@ public class SbtImportListener implements ProjectDataImportListener {
     if (myType != null) {
       AutoImportProjectTracker importTracker = AutoImportProjectTracker.getInstance(project);
 
-      ExternalSystemProjectId projectId = new ExternalSystemProjectId(SbtProjectSystem.Id(), project.getBasePath());
+      ExternalSystemProjectId projectId = new ExternalSystemProjectId(SbtProjectSystem.Id, project.getBasePath());
       importTracker.register(new ChiselProjectAware(projectId));
     }
   }
@@ -39,7 +39,6 @@ public class SbtImportListener implements ProjectDataImportListener {
       Module module = ModuleManager.getInstance(myProject).findModuleByName(myProject.getName());
       if (module != null) {
 
-        // todo fix "Cannot find or load main class ……" error when execute run configuration
         // add path to module dependencies path?
         File classDir = new File(CompilerPaths.getModuleOutputPath(module,false));
         File testClassDir = new File(CompilerPaths.getModuleOutputPath(module,true));

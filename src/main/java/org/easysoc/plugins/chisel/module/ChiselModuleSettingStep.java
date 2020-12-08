@@ -62,10 +62,10 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
 
     // components only needs to be rebuilt once
     if (sbtImport == null) {
-      sbtImport = new JCheckBox("Use Sbt Shell For Import", settings.getBoolean(SBT_IMPORT,true));
+      sbtImport = new JCheckBox("Use Sbt Shell For Reload", settings.getBoolean(SBT_IMPORT,true));
       sbtBuild = new JCheckBox("Use Sbt Shell For Build", settings.getBoolean(SBT_BUILD,true));
 
-      String[] scalaVersions = {"2.12.11", "2.11.12"};
+      String[] scalaVersions = {"2.12.12", "2.11.12"};
       comboScalaVersions = new ComboBox(scalaVersions);
       Dimension preferSize = comboScalaVersions.getPreferredSize();
 
@@ -73,11 +73,11 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
       comboSbtVersions = new ComboBox(sbtVersions);
       comboSbtVersions.setPreferredSize(preferSize);
 
-      String[] chiselVersions = {"3.3.+", "3.2.+"};
+      String[] chiselVersions = {"3.4.+","3.3.+", "3.2.+"};
       comboChiselVersions = new ComboBox(chiselVersions);
       comboChiselVersions.setPreferredSize(preferSize);
 
-      String[] iotesterVersions = {"1.4.+", "1.3.+"};
+      String[] iotesterVersions = {"1.5.+","1.4.+", "1.3.+"};
       comboTesterVersions = new ComboBox(iotesterVersions);
       comboTesterVersions.setPreferredSize(preferSize);
 
@@ -89,7 +89,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
       addSettingsField("Sbt Version:",comboSbtVersions);
       addSettingsField("Scala Version:",comboScalaVersions);
       labelChiselVersions = addSettingsField("Chisel Version:",comboChiselVersions);
-      labelTesterVersions = addSettingsField("Chisel Tester:", comboTesterVersions);
+      labelTesterVersions = addSettingsField("Chisel Testers:", comboTesterVersions);
       addSettingsField("Version:", versionField);
     }
 

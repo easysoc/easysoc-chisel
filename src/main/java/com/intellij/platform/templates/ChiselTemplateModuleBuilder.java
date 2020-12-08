@@ -16,6 +16,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.module.*;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -277,7 +278,7 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
       myTemplate.processStream(new ArchivedProjectTemplate.StreamProcessor<Void>() {
         @Override
         public Void consume(@NotNull ZipInputStream stream) throws IOException {
-          ZipUtil.unzip(ProgressManager.getInstance().getProgressIndicator(), dir, stream, path1 -> {
+          ZipUtil.unzip(ProgressManager.getInstance().getProgressIndicator(), dir.toPath(), stream, path1 -> {
             if (isModuleMode && path1.contains(Project.DIRECTORY_STORE_FOLDER)) {
               return null;
             }
@@ -285,18 +286,15 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
               return path1.replace(getPathFragment(basePackage.getDefaultValue()), getPathFragment(basePackage.getValue()));
             }
             return path1;
-          }, new ZipUtil.ContentProcessor() {
-            @Override
-            public byte[] processContent(byte[] content, File file) throws IOException {
-              if(pI != null){
-                pI.checkCanceled();
-              }
-              FileType fileType = FileTypeManager.getInstance().getFileTypeByFileName(file.getName());
-              String text = new String(content, StandardCharsets.UTF_8);
-              consumer.setCurrentFile(file.getName(), text);
-              // unknown type isBinary return true
-              return /*fileType.isBinary() |*/ file.getName().equals(".gitignore")? content : processTemplates(projectName, text, file, consumer);
+          }, (content, file) -> {
+            if(pI != null){
+              pI.checkCanceled();
             }
+//              FileType fileType = FileTypeManager.getInstance().getFileTypeByFileName(file.getName());
+            String text = new String(content, StandardCharsets.UTF_8);
+            consumer.setCurrentFile(file.getName(), text);
+            // unknown type isBinary return true
+            return /*fileType.isBinary() |*/ file.getName().equals(".gitignore")? content : processTemplates(projectName, text, file, consumer);
           }, true);
 
           myTemplate.handleUnzippedDirectories(dir, filesToRefresh);
