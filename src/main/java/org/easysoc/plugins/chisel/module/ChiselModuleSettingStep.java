@@ -62,23 +62,23 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
 
     // components only needs to be rebuilt once
     if (sbtImport == null) {
-      sbtImport = new JCheckBox("Use Sbt Shell For Reload", settings.getBoolean(SBT_IMPORT,true));
+      sbtImport = new JCheckBox("Use Sbt Shell For Import", settings.getBoolean(SBT_IMPORT,true));
       sbtBuild = new JCheckBox("Use Sbt Shell For Build", settings.getBoolean(SBT_BUILD,true));
 
-      String[] scalaVersions = {"2.12.12", "2.11.12"};
+      String[] scalaVersions = {"2.12.13"};
       comboScalaVersions = new ComboBox(scalaVersions);
       Dimension preferSize = comboScalaVersions.getPreferredSize();
 
-      String[] sbtVersions = {"1.3.10", "1.3.9", "1.3.8"};
+      String[] sbtVersions = {"1.3.10", "1.4.7"};
       comboSbtVersions = new ComboBox(sbtVersions);
       comboSbtVersions.setPreferredSize(preferSize);
 
-      String[] chiselVersions = {"3.4.+","3.3.+", "3.2.+"};
+      String[] chiselVersions = {"3.4.+"};
       comboChiselVersions = new ComboBox(chiselVersions);
       comboChiselVersions.setPreferredSize(preferSize);
 
-      String[] iotesterVersions = {"1.5.+","1.4.+", "1.3.+"};
-      comboTesterVersions = new ComboBox(iotesterVersions);
+      String[] testers2Versions = {"0.3.+"};
+      comboTesterVersions = new ComboBox(testers2Versions);
       comboTesterVersions.setPreferredSize(preferSize);
 
       versionField = new JTextField("1.0.0");
@@ -89,7 +89,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
       addSettingsField("Sbt Version:",comboSbtVersions);
       addSettingsField("Scala Version:",comboScalaVersions);
       labelChiselVersions = addSettingsField("Chisel Version:",comboChiselVersions);
-      labelTesterVersions = addSettingsField("Chisel Testers:", comboTesterVersions);
+      labelTesterVersions = addSettingsField("Chisel Test(testers2):", comboTesterVersions);
       addSettingsField("Version:", versionField);
     }
 
@@ -139,7 +139,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
     myProperties.setProperty("SBT_VERSION",comboSbtVersions.getSelectedItem().toString());
     myProperties.setProperty("SCALA_VERSION",comboScalaVersions.getSelectedItem().toString());
     myProperties.setProperty("CHISEL_VERSION",comboChiselVersions.getSelectedItem().toString());
-    myProperties.setProperty("TESTER_VERSION",comboTesterVersions.getSelectedItem().toString());
+    myProperties.setProperty("TESTER2_VERSION",comboTesterVersions.getSelectedItem().toString());
     myProperties.setProperty("VERSION",versionField.getText());
 
     myWizardContext.putUserData(ChiselModuleType.EASYSOC_CHIP,myProperties);
@@ -161,8 +161,8 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
     JLabel jLabel = new JBLabel(label);
     jLabel.setLabelFor(field);
     jLabel.setVerticalAlignment(SwingConstants.TOP);
-    // GridBagConstraints 参数 https://blog.csdn.net/zxlqaz/article/details/68061101
-    //
+
+    // GridBagConstraints https://blog.csdn.net/zxlqaz/article/details/68061101
     panel.add(jLabel, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 0, 0, GridBagConstraints.WEST,
                                              GridBagConstraints.VERTICAL, JBUI.insets(5, 0, 5, 0), 4, 0));
     panel.add(field, new GridBagConstraints(1, GridBagConstraints.RELATIVE, withEnabled?1:2, 1, 0, 0, GridBagConstraints.WEST,

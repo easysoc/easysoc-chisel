@@ -4,8 +4,9 @@
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>Support for IntelliJ IDEA 2020.3</li>
-            <li>Update the version of Scala, Chisel, Chisel Testers</li>
+            <li>Support for ChiselTest and remove Chisel-Testers</li>
+            <li>Update the version of Scala, Chisel, ChiselTest</li>
+            <li>Update the GCD example to the latest chisel-template</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[
@@ -24,7 +25,7 @@
         <moduleType id="CHISEL_MODULE" implementationClass="org.easysoc.plugins.chisel.module.ChiselModuleType"/>
         <projectTemplate projectType="CHISEL_MODULE" templatePath="projectTemplates/Empty_Chisel_Project.zip"/>
         <projectTemplate projectType="CHISEL_MODULE" templatePath="projectTemplates/Empty_Scala_Project.zip"/>
-        <projectTemplate projectType="CHISEL_MODULE" templatePath="projectTemplates/GCD_Example_With_Chisel_Testers.zip"/>
+        <projectTemplate projectType="CHISEL_MODULE" templatePath="projectTemplates/GCD_Example_With_ChiselTest.zip"/>
     </extensions>
 
     <actions>
