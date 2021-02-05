@@ -20,14 +20,14 @@ import java.util.List;
 public class ChiselTemplateWizardStep extends ModuleWizardStep implements Disposable {
 
   private final WizardContext myContext;
-  private final NewProjectWizard myWizard;
+//  private final NewProjectWizard myWizard;
 
   private final ProjectTemplateList myTemplatesList;
   private final MultiMap<TemplatesGroup,ProjectTemplate> myTemplatesMap;
 
   public ChiselTemplateWizardStep(WizardContext context, SettingsStep settingsStep) throws NoSuchFieldException, IllegalAccessException {
     myContext = context;
-    myWizard = (NewProjectWizard)context.getWizard();
+//    myWizard = (NewProjectWizard)context.getWizard();
 
     // must new another
     myTemplatesList = new ProjectTemplateList();

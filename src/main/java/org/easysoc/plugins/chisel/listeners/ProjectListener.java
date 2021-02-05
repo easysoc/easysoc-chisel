@@ -20,8 +20,8 @@ public class ProjectListener implements ProjectManagerListener {
     if (myType != null) {
       // should be same as ChiselModuleType's getName() method value
       if (myType.equals("Chisel")) {
-        // only listen once for new project
-        project.getMessageBus().connect().subscribe(ProjectDataImportListener.TOPIC,new SbtImportListener(project));
+        // only listen once for new project, not for old project
+//        project.getMessageBus().connect().subscribe(ProjectDataImportListener.TOPIC,new SbtImportListener(project));
 
         PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
         String IS_FIRST_IMPORT = "easysoc.chip.first.import";
