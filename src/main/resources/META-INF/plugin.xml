@@ -4,9 +4,9 @@
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>Support for ChiselTest and remove Chisel-Testers</li>
-            <li>Update the version of Scala, Chisel, ChiselTest</li>
-            <li>Update the GCD example to the latest chisel-template</li>
+            <li>Remove project importing hacks that are no longer needed</li>
+            <li>Only show Java SDK in recommended list</li>
+            <li>Disable support for creating Chisel module</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[

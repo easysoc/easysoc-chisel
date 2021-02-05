@@ -1,8 +1,10 @@
 package org.easysoc.plugins.chisel.module;
 
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.ide.util.projectWizard.*;
-import com.intellij.ide.wizard.CommitStepException;
+import com.intellij.ide.util.projectWizard.ModuleWizardStep;
+import com.intellij.ide.util.projectWizard.ProjectBuilder;
+import com.intellij.ide.util.projectWizard.WizardContext;
+import com.intellij.ide.util.projectWizard.WizardInputField;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.platform.templates.ArchivedProjectTemplate;
 import com.intellij.platform.templates.ChiselTemplateModuleBuilder;
@@ -15,9 +17,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
-import java.lang.reflect.Field;
 
 @SuppressWarnings("unchecked")
 public class ChiselModuleSettingStep extends ModuleWizardStep {
@@ -62,8 +64,8 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
 
     // components only needs to be rebuilt once
     if (sbtImport == null) {
-      sbtImport = new JCheckBox("Use Sbt Shell For Import", settings.getBoolean(SBT_IMPORT,true));
-      sbtBuild = new JCheckBox("Use Sbt Shell For Build", settings.getBoolean(SBT_BUILD,true));
+      sbtImport = new JCheckBox("Use Sbt Shell For Import", settings.getBoolean(SBT_IMPORT,false));
+      sbtBuild = new JCheckBox("Use Sbt Shell For Build", settings.getBoolean(SBT_BUILD,false));
 
       String[] scalaVersions = {"2.12.13"};
       comboScalaVersions = new ComboBox(scalaVersions);
@@ -106,7 +108,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
   }
 
   @Override
-  public void onWizardFinished() throws CommitStepException {
+  public void onWizardFinished() {
     // all components have been destroyed
     try {
       ProjectBuilder projectBuilder = myWizardContext.getProjectBuilder();
