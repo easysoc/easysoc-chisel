@@ -4,9 +4,9 @@
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>Remove project importing hacks that are no longer needed</li>
-            <li>Only show Java SDK in recommended list</li>
-            <li>Disable support for creating Chisel module</li>
+            <li>Add Open/Search API Documentation menu</li>
+            <li>Option to use layered-firrtl to generate ELK Graph</li>
+            <li>Don't download JavaDoc file</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[
@@ -29,13 +29,20 @@
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
-<!--        <group id="Digital" text="_Digital" description="Simple menu">-->
-<!--            <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>-->
-<!--        </group>-->
-<!--        <action id="chisel.hello" class="org.easysoc.plugins.chisel.actions.Hello" text="Hellomenu" description="HellomenuHellomenu">-->
-<!--            <add-to-group group-id="Digital" anchor="first"/>-->
-<!--        </action>-->
+    <!-- Add your actions here -->
+    <group id="HDL" text="H_DL" popup="true" description="Hardware design language tools and utilities">
+        <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>
+        <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        <add-to-group group-id="ProjectViewPopupMenu" anchor="before" relative-to-action="ProjectViewPopupMenuRefactoringGroup"/>
+        <action id="OpenChiselDocAction" class="org.easysoc.plugins.chisel.actions.OpenChiselDocAction"
+                text="Search Chisel API Documentation" description="Open/Search Chisel API documentation" />
+        <action id="OpenFirrtlDocAction" class="org.easysoc.plugins.chisel.actions.OpenFirrtlDocAction"
+                text="Search Firrtl API Documentation" description="Open/Search Firrtl API documentation" />
+        <action id="OpenTestDocAction" class="org.easysoc.plugins.chisel.actions.OpenTestDocAction"
+                text="Search ChiselTest API Documentation" description="Open/Search ChiselTest API documentation" />
+        <action id="OpenStackOverflowAction" class="org.easysoc.plugins.chisel.actions.OpenStackOverflowAction"
+                text="Search Chisel Questions on Stack Overflow" description="Open/Search Chisel questions on stack overflow" />
+    </group>
     </actions>
     <projectListeners>
         <listener class="org.easysoc.plugins.chisel.listeners.ProjectListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>
