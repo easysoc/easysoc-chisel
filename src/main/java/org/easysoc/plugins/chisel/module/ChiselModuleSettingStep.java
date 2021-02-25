@@ -42,6 +42,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
   private ComboBox comboTesterVersions;
   private JCheckBox sbtImport;
   private JCheckBox sbtBuild;
+  private JCheckBox buildGraph;
   private JTextField versionField;
 
   private JLabel labelChiselVersions;
@@ -66,6 +67,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
     if (sbtImport == null) {
       sbtImport = new JCheckBox("Use Sbt Shell For Import", settings.getBoolean(SBT_IMPORT,false));
       sbtBuild = new JCheckBox("Use Sbt Shell For Build", settings.getBoolean(SBT_BUILD,false));
+      buildGraph = new JCheckBox("Use layered-firrtl to generate ELK Graph", true);
 
       String[] scalaVersions = {"2.12.13"};
       comboScalaVersions = new ComboBox(scalaVersions);
@@ -88,6 +90,8 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
 
       addSettingsComponent(sbtImport);
       addSettingsComponent(sbtBuild);
+      addSettingsComponent(buildGraph);
+
       addSettingsField("Sbt Version:",comboSbtVersions);
       addSettingsField("Scala Version:",comboScalaVersions);
       labelChiselVersions = addSettingsField("Chisel Version:",comboChiselVersions);
@@ -95,6 +99,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
       addSettingsField("Version:", versionField);
     }
 
+    buildGraph.setVisible(notEmptyScalaProject);
     labelChiselVersions.setVisible(notEmptyScalaProject);
     comboChiselVersions.setVisible(notEmptyScalaProject);
 
@@ -138,6 +143,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
     myProperties = new Properties();
     myProperties.setProperty("USE_SBT_IMPORT",String.valueOf(sbtImport.isSelected()));
     myProperties.setProperty("USE_SBT_BUILD",String.valueOf(sbtBuild.isSelected()));
+    myProperties.setProperty("BUILD_GRAPH",String.valueOf(buildGraph.isSelected()));
     myProperties.setProperty("SBT_VERSION",comboSbtVersions.getSelectedItem().toString());
     myProperties.setProperty("SCALA_VERSION",comboScalaVersions.getSelectedItem().toString());
     myProperties.setProperty("CHISEL_VERSION",comboChiselVersions.getSelectedItem().toString());
