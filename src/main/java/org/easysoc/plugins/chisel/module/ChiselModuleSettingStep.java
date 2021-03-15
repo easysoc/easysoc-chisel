@@ -67,7 +67,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
     if (sbtImport == null) {
       sbtImport = new JCheckBox("Use Sbt Shell For Import", settings.getBoolean(SBT_IMPORT,false));
       sbtBuild = new JCheckBox("Use Sbt Shell For Build", settings.getBoolean(SBT_BUILD,false));
-      buildGraph = new JCheckBox("Use layered-firrtl to generate ELK Graph", true);
+      buildGraph = new JCheckBox("Use layered-firrtl to generate graph files for circuit visualization", true);
 
       String[] scalaVersions = {"2.12.13"};
       comboScalaVersions = new ComboBox(scalaVersions);

@@ -4,9 +4,8 @@
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>Add Open/Search API Documentation menu</li>
-            <li>Option to use layered-firrtl to generate ELK Graph</li>
-            <li>Don't download JavaDoc file</li>
+            <li>Fixed <a href="https://github.com/easysoc/layered-firrtl">layered-firrtl</a> dependency version</li>
+            <li>Make GCD example's register initialized to 0</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[
