@@ -18,3 +18,14 @@
     comment or remove `jvmArgs '-Didea.platform.prefix=Chip'`
 
 3. run gradle tasks buildPlugin or runIde directly
+
+### Sponsor
+
+Please check if these plugins are helpful to you (Free for students and teachers)
+
+- [EasySoC Diagrammer](https://plugins.jetbrains.com/plugin/16255-easysoc-diagrammer)	for circuit visualization
+- [EasySoC Verilog](https://plugins.jetbrains.com/plugin/14184-easysoc-verilog) 	Jump to the corresponding Chisel code
+
+| Contact me by WeChat |
+| :--------------------------------------------------------: |
+| ![wechatpay_160](https://github.com/itviewer/personal/blob/main/wechat.jpg?raw=true) |
