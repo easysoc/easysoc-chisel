@@ -3,6 +3,7 @@
 ### Features
 
 - Create new Chisel project based on ProjectWizard and Templates
+- Create Chisel module file from fileTemplates
 - Open/Search Chisel/Firrtl API Documentation
 
 ![](https://plugins.jetbrains.com/files/14269/screenshot_21779.png)

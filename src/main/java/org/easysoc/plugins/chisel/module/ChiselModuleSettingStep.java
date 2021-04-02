@@ -109,17 +109,18 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
       ProjectBuilder projectBuilder = myWizardContext.getProjectBuilder();
       if (projectBuilder instanceof TemplateModuleBuilder) {
         TemplateModuleBuilder builder = (TemplateModuleBuilder)projectBuilder;
+        if (builder.getModuleType().getId().equals("CHISEL_MODULE")) {
+          Field fieldTemplate = TemplateModuleBuilder.class.getDeclaredField("myTemplate");
+          Field fieldAdditionalFields = TemplateModuleBuilder.class.getDeclaredField("myAdditionalFields");
 
-        Field fieldTemplate = TemplateModuleBuilder.class.getDeclaredField("myTemplate");
-        Field fieldAdditionalFields = TemplateModuleBuilder.class.getDeclaredField("myAdditionalFields");
+          fieldTemplate.setAccessible(true);
+          fieldAdditionalFields.setAccessible(true);
 
-        fieldTemplate.setAccessible(true);
-        fieldAdditionalFields.setAccessible(true);
+          ArchivedProjectTemplate myTemplate = (ArchivedProjectTemplate)fieldTemplate.get(builder);
+          List<WizardInputField<?>> myAdditionalFields = (List<WizardInputField<?>>) fieldAdditionalFields.get(builder);
 
-        ArchivedProjectTemplate myTemplate = (ArchivedProjectTemplate)fieldTemplate.get(builder);
-        List<WizardInputField<?>> myAdditionalFields = (List<WizardInputField<?>>) fieldAdditionalFields.get(builder);
-
-        myWizardContext.setProjectBuilder(new ChiselTemplateModuleBuilder(myTemplate,builder.getModuleType(),myAdditionalFields,myWizardContext));
+          myWizardContext.setProjectBuilder(new ChiselTemplateModuleBuilder(myTemplate,builder.getModuleType(),myAdditionalFields,myWizardContext));
+        }
       }
     } catch (NoSuchFieldException | IllegalAccessException e) {
       e.printStackTrace();
@@ -140,7 +141,8 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
     myProperties.setProperty("CHISEL_VERSION", chiselVersion);
 
     myProperties.setProperty("TESTER2_VERSION", chiselVersion.endsWith("SNAPSHOT") ? "0.5-SNAPSHOT" : "0.3.+");
-    myProperties.setProperty("LAYERED_FIRRTL", "1.0.8");
+    myProperties.setProperty("LAYERED_FIRRTL", "1.0.9");
+    myProperties.setProperty("CHISEL_35", chiselVersion.startsWith("3.5") ? "true" : "false");
     myProperties.setProperty("VERSION",versionField.getText());
 
     myWizardContext.putUserData(ChiselModuleType.EASYSOC_CHIP,myProperties);

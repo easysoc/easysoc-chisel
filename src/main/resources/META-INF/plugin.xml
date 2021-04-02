@@ -4,10 +4,10 @@
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>Create Chisel module from fileTemplates</li>
-            <li>Enables autoclonetype2</li>
+            <li>Create Chisel Module from fileTemplates</li>
+            <li>Enable select SNAPSHOT version Chisel</li>
             <li>Automatically set chiseltest version</li>
-            <li>Update <a href="https://github.com/easysoc/layered-firrtl">layered-firrtl</a> to version 1.0.8</li>
+            <li>Update <a href="https://github.com/easysoc/layered-firrtl">layered-firrtl</a> to version 1.0.9</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[
