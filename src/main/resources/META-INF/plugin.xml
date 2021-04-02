@@ -1,11 +1,13 @@
-<idea-plugin allow-bundled-update="true" url="https://www.easysoc.org">
+<idea-plugin url="https://www.easysoc.org">
     <id>org.easysoc.chisel</id>
     <name>EasySoC Chisel</name>
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>Fixed <a href="https://github.com/easysoc/layered-firrtl">layered-firrtl</a> dependency version</li>
-            <li>Make GCD example's register initialized to 0</li>
+            <li>Create Chisel module from fileTemplates</li>
+            <li>Enables autoclonetype2</li>
+            <li>Automatically set chiseltest version</li>
+            <li>Update <a href="https://github.com/easysoc/layered-firrtl">layered-firrtl</a> to version 1.0.8</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[
@@ -21,27 +23,36 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <internalFileTemplate name="Chisel Module"/>
+        <internalFileTemplate name="Chisel RawModule"/>
+        <internalFileTemplate name="Chisel MultiIOModule"/>
+
         <moduleType id="CHISEL_MODULE" implementationClass="org.easysoc.plugins.chisel.module.ChiselModuleType"/>
         <projectTemplate projectType="CHISEL_MODULE" templatePath="projectTemplates/Empty_Chisel_Project.zip"/>
         <projectTemplate projectType="CHISEL_MODULE" templatePath="projectTemplates/Empty_Scala_Project.zip"/>
         <projectTemplate projectType="CHISEL_MODULE" templatePath="projectTemplates/GCD_Example_With_ChiselTest.zip"/>
+
     </extensions>
 
     <actions>
-    <!-- Add your actions here -->
-    <group id="HDL" text="H_DL" popup="true" description="Hardware design language tools and utilities">
-        <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>
-        <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-        <add-to-group group-id="ProjectViewPopupMenu" anchor="before" relative-to-action="ProjectViewPopupMenuRefactoringGroup"/>
-        <action id="OpenChiselDocAction" class="org.easysoc.plugins.chisel.actions.OpenChiselDocAction"
-                text="Search Chisel API Documentation" description="Open/Search Chisel API documentation" />
-        <action id="OpenFirrtlDocAction" class="org.easysoc.plugins.chisel.actions.OpenFirrtlDocAction"
-                text="Search Firrtl API Documentation" description="Open/Search Firrtl API documentation" />
-        <action id="OpenTestDocAction" class="org.easysoc.plugins.chisel.actions.OpenTestDocAction"
-                text="Search ChiselTest API Documentation" description="Open/Search ChiselTest API documentation" />
-        <action id="OpenStackOverflowAction" class="org.easysoc.plugins.chisel.actions.OpenStackOverflowAction"
-                text="Search Chisel Questions on Stack Overflow" description="Open/Search Chisel questions on stack overflow" />
-    </group>
+        <!-- Add your actions here -->
+        <group id="HDL" text="H_DL" popup="true" description="Hardware design language tools and utilities">
+            <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="before" relative-to-action="ProjectViewPopupMenuRefactoringGroup"/>
+            <action id="OpenChiselDocAction" class="org.easysoc.plugins.chisel.actions.OpenChiselDocAction"
+                    text="Search Chisel API Documentation" description="Open/Search Chisel API documentation" />
+            <action id="OpenFirrtlDocAction" class="org.easysoc.plugins.chisel.actions.OpenFirrtlDocAction"
+                    text="Search Firrtl API Documentation" description="Open/Search Firrtl API documentation" />
+            <action id="OpenTestDocAction" class="org.easysoc.plugins.chisel.actions.OpenTestDocAction"
+                    text="Search ChiselTest API Documentation" description="Open/Search ChiselTest API documentation" />
+            <action id="OpenStackOverflowAction" class="org.easysoc.plugins.chisel.actions.OpenStackOverflowAction"
+                    text="Search Chisel Questions on Stack Overflow" description="Open/Search Chisel questions on stack overflow" />
+        </group>
+
+        <action id="CreateChiselModuleAction" class="org.easysoc.plugins.chisel.actions.CreateChiselModuleAction">
+            <add-to-group group-id="NewGroup" anchor="first"/>
+        </action>
     </actions>
     <projectListeners>
         <listener class="org.easysoc.plugins.chisel.listeners.ProjectListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>

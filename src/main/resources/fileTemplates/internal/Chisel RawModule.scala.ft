@@ -1,0 +1,11 @@
+#if ((${PACKAGE_NAME} && ${PACKAGE_NAME} != ""))package ${PACKAGE_NAME} #end
+#parse("File Header.java")
+import chisel3._
+
+class ${NAME} extends RawModule {
+  val io = IO(new Bundle {
+    #[[$END$]]#
+  })
+  
+}
+

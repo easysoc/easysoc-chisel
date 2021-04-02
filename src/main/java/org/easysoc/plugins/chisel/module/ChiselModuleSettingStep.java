@@ -39,14 +39,12 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
   private ComboBox comboSbtVersions;
   private ComboBox comboScalaVersions;
   private ComboBox comboChiselVersions;
-  private ComboBox comboTesterVersions;
   private JCheckBox sbtImport;
   private JCheckBox sbtBuild;
   private JCheckBox buildGraph;
   private JTextField versionField;
 
   private JLabel labelChiselVersions;
-  private JLabel labelTesterVersions;
 
   // called when Create New Project
   public ChiselModuleSettingStep(WizardContext context) {
@@ -69,21 +67,17 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
       sbtBuild = new JCheckBox("Use Sbt Shell For Build", settings.getBoolean(SBT_BUILD,false));
       buildGraph = new JCheckBox("Use layered-firrtl to generate graph files for circuit visualization", true);
 
+      String[] chiselVersions = {"3.4.+", "3.5-SNAPSHOT"};
+      comboChiselVersions = new ComboBox(chiselVersions);
+      Dimension preferSize = comboChiselVersions.getPreferredSize();
+
       String[] scalaVersions = {"2.12.13"};
       comboScalaVersions = new ComboBox(scalaVersions);
-      Dimension preferSize = comboScalaVersions.getPreferredSize();
+      comboScalaVersions.setPreferredSize(preferSize);
 
-      String[] sbtVersions = {"1.3.10", "1.4.7"};
+      String[] sbtVersions = {"1.4.9", "1.3.10"};
       comboSbtVersions = new ComboBox(sbtVersions);
       comboSbtVersions.setPreferredSize(preferSize);
-
-      String[] chiselVersions = {"3.4.+"};
-      comboChiselVersions = new ComboBox(chiselVersions);
-      comboChiselVersions.setPreferredSize(preferSize);
-
-      String[] testers2Versions = {"0.3.+"};
-      comboTesterVersions = new ComboBox(testers2Versions);
-      comboTesterVersions.setPreferredSize(preferSize);
 
       versionField = new JTextField("1.0.0");
       versionField.setPreferredSize(preferSize);
@@ -95,16 +89,12 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
       addSettingsField("Sbt Version:",comboSbtVersions);
       addSettingsField("Scala Version:",comboScalaVersions);
       labelChiselVersions = addSettingsField("Chisel Version:",comboChiselVersions);
-      labelTesterVersions = addSettingsField("Chisel Test(testers2):", comboTesterVersions);
       addSettingsField("Version:", versionField);
     }
 
     buildGraph.setVisible(notEmptyScalaProject);
     labelChiselVersions.setVisible(notEmptyScalaProject);
     comboChiselVersions.setVisible(notEmptyScalaProject);
-
-    labelTesterVersions.setVisible(notEmptyScalaProject);
-    comboTesterVersions.setVisible(notEmptyScalaProject);
   }
 
   @Override
@@ -140,14 +130,17 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
   @Override
   public void updateDataModel() {
 
+    String chiselVersion = comboChiselVersions.getSelectedItem().toString();
     myProperties = new Properties();
     myProperties.setProperty("USE_SBT_IMPORT",String.valueOf(sbtImport.isSelected()));
     myProperties.setProperty("USE_SBT_BUILD",String.valueOf(sbtBuild.isSelected()));
     myProperties.setProperty("BUILD_GRAPH",String.valueOf(buildGraph.isSelected()));
     myProperties.setProperty("SBT_VERSION",comboSbtVersions.getSelectedItem().toString());
     myProperties.setProperty("SCALA_VERSION",comboScalaVersions.getSelectedItem().toString());
-    myProperties.setProperty("CHISEL_VERSION",comboChiselVersions.getSelectedItem().toString());
-    myProperties.setProperty("TESTER2_VERSION",comboTesterVersions.getSelectedItem().toString());
+    myProperties.setProperty("CHISEL_VERSION", chiselVersion);
+
+    myProperties.setProperty("TESTER2_VERSION", chiselVersion.endsWith("SNAPSHOT") ? "0.5-SNAPSHOT" : "0.3.+");
+    myProperties.setProperty("LAYERED_FIRRTL", "1.0.8");
     myProperties.setProperty("VERSION",versionField.getText());
 
     myWizardContext.putUserData(ChiselModuleType.EASYSOC_CHIP,myProperties);

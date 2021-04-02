@@ -1,0 +1,10 @@
+#if ((${PACKAGE_NAME} && ${PACKAGE_NAME} != ""))package ${PACKAGE_NAME} #end
+#parse("File Header.java")
+import chisel3._
+
+class ${NAME} extends MultiIOModule {
+  val input = IO(Input(UInt(16.W)))
+  val output = IO(Output(UInt(16.W)))
+  #[[$END$]]#
+}
+
