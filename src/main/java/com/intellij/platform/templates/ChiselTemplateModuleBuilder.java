@@ -10,6 +10,7 @@ import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.ide.util.projectWizard.*;
+import com.intellij.lang.LangBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Attachment;
 import com.intellij.openapi.diagnostic.Logger;
@@ -44,6 +45,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.apache.velocity.exception.VelocityException;
 import org.easysoc.plugins.chisel.module.ChiselModuleType;
 import org.jdom.JDOMException;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jps.model.serialization.PathMacroUtil;
@@ -60,6 +62,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.stream.Stream;
 import java.util.zip.ZipInputStream;
 
 public class ChiselTemplateModuleBuilder extends ModuleBuilder {
@@ -111,17 +114,19 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
           }
         });
 
-        StartupManager.getInstance(project).registerPostStartupActivity(() -> {
-          ApplicationManager.getApplication().runWriteAction(() -> {
-            try {
-              ModifiableModuleModel modifiableModuleModel = ModuleManager.getInstance(project).getModifiableModel();
-              modifiableModuleModel.renameModule(module, module.getProject().getName());
-              modifiableModuleModel.commit();
-              fixModuleName(module);
-            }
-            catch (ModuleWithNameAlreadyExists exists) {
-              // do nothing
-            }
+        StartupManager.getInstance(project).registerStartupActivity(() -> {
+          ApplicationManager.getApplication().invokeAndWait(() -> {
+            ApplicationManager.getApplication().runWriteAction(() -> {
+              try {
+                ModifiableModuleModel modifiableModuleModel = ModuleManager.getInstance(project).getModifiableModel();
+                modifiableModuleModel.renameModule(module, module.getProject().getName());
+                modifiableModuleModel.commit();
+                fixModuleName(module);
+              }
+              catch (ModuleWithNameAlreadyExists exists) {
+                // do nothing
+              }
+            });
           });
         });
         return module;
@@ -135,7 +140,7 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
 
   @NotNull
   @Override
-  public String getBuilderId() {
+  public @NonNls String getBuilderId() {
     return myTemplate.getName();
   }
 
@@ -224,7 +229,7 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
                      boolean reportFailuresWithDialog) {
     final WizardInputField<?> basePackage = getBasePackageField();
     try {
-      final File dir = new File(path);
+      Path dir = Paths.get(path);
       class ExceptionConsumer implements Consumer<VelocityException> {
         private String myPath;
         private String myText;
@@ -248,24 +253,24 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
           if(reportFailuresWithDialog) {
             String dialogMessage;
             if (myFailures.size() == 1) {
-              dialogMessage = "Failed to decode file \'" + myFailures.get(0).getFirst() + "\'";
+              dialogMessage = LangBundle.message("dialog.message.failed.to.decode.file", myFailures.get(0).getFirst());
             }
             else {
               StringBuilder dialogMessageBuilder = new StringBuilder();
-              dialogMessageBuilder.append("Failed to decode files: \n");
+              dialogMessageBuilder.append(LangBundle.message("dialog.message.failed.to.decode.files")).append('\n');
               for (Trinity<String, String, VelocityException> failure : myFailures) {
                 dialogMessageBuilder.append(failure.getFirst()).append("\n");
               }
-              dialogMessage = dialogMessageBuilder.toString();
+              dialogMessage = dialogMessageBuilder.toString(); //NON-NLS
             }
-            Messages.showErrorDialog(dialogMessage, "Decoding Template");
+            Messages.showErrorDialog(dialogMessage, LangBundle.message("dialog.title.decoding.template"));
           }
 
-          StringBuilder reportBuilder = new StringBuilder();
+          @NonNls StringBuilder reportBuilder = new StringBuilder();
           for (Trinity<String, String, VelocityException> failure : myFailures) {
             reportBuilder.append("File: ").append(failure.getFirst()).append("\n");
             reportBuilder.append("Exception:\n").append(ExceptionUtil.getThrowableText(failure.getThird())).append("\n");
-            reportBuilder.append("File content:\n\'").append(failure.getSecond()).append("\'\n");
+            reportBuilder.append("File content:\n'").append(failure.getSecond()).append("'\n");
             reportBuilder.append("\n===========================================\n");
           }
 
@@ -278,7 +283,7 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
       myTemplate.processStream(new ArchivedProjectTemplate.StreamProcessor<Void>() {
         @Override
         public Void consume(@NotNull ZipInputStream stream) throws IOException {
-          ZipUtil.unzip(ProgressManager.getInstance().getProgressIndicator(), dir.toPath(), stream, path1 -> {
+          ZipUtil.unzip(ProgressManager.getInstance().getProgressIndicator(), dir, stream, path1 -> {
             if (isModuleMode && path1.contains(Project.DIRECTORY_STORE_FOLDER)) {
               return null;
             }
@@ -297,22 +302,21 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
             return /*fileType.isBinary() |*/ file.getName().equals(".gitignore")? content : processTemplates(projectName, text, file, consumer);
           }, true);
 
-          myTemplate.handleUnzippedDirectories(dir, filesToRefresh);
+          myTemplate.handleUnzippedDirectories(dir.toFile(), filesToRefresh);
           return null;
         }
       });
 
       if (pI != null) {
-        pI.setText("Refreshing...");
+        pI.setText(LangBundle.message("progress.title.refreshing"));
       }
 
-      String iml = ContainerUtil.find(ObjectUtils.chooseNotNull(dir.list(), ArrayUtilRt.EMPTY_STRING_ARRAY), s -> s.endsWith(".iml"));
       if (isModuleMode) {
-        File from = new File(path, Objects.requireNonNull(iml));
-        File to = new File(getModuleFilePath());
-        if (!from.renameTo(to)) {
-          throw new IOException("Can't rename " + from + " to " + to);
+        Path from;
+        try (Stream<Path> list = Files.list(dir)) {
+          from = list.filter(it -> it.toString().endsWith(".iml")).findFirst().orElse(null);
         }
+        Files.move(Objects.requireNonNull(from), Paths.get(getModuleFilePath()));
       }
 
       RefreshQueue refreshQueue = RefreshQueue.getInstance();
@@ -338,7 +342,7 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
   }
 
   @SuppressWarnings("UseOfPropertiesAsHashtable")
-  private byte[] processTemplates(@Nullable String projectName, String content, File file, Consumer<? super VelocityException> exceptionConsumer)
+  private byte @Nullable [] processTemplates(@Nullable String projectName, String content, File file, Consumer<? super VelocityException> exceptionConsumer)
     throws IOException {
     String patchedContent = content;
     if (!(myTemplate instanceof LocalArchivedTemplate) || ((LocalArchivedTemplate)myTemplate).isEscaped()) {
@@ -366,11 +370,11 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
       if (i != -1) {
         final FileTemplate template =
           FileTemplateManager.getDefaultInstance().getDefaultTemplate(SaveProjectAsTemplateAction.getFileHeaderTemplateName());
-        Properties properties = FileTemplateManager.getDefaultInstance().getDefaultProperties();
-        String templateText = template.getText(properties);
-        patchedContent = patchedContent.substring(0, i) +
-                         templateText +
-                         patchedContent.substring(i + SaveProjectAsTemplateAction.FILE_HEADER_TEMPLATE_PLACEHOLDER.length());
+          Properties properties = FileTemplateManager.getDefaultInstance().getDefaultProperties();
+          String templateText = template.getText(properties);
+          patchedContent = patchedContent.substring(0, i) +
+                           templateText +
+                           patchedContent.substring(i + SaveProjectAsTemplateAction.FILE_HEADER_TEMPLATE_PLACEHOLDER.length());
       }
     }
     return StringUtilRt.convertLineSeparators(patchedContent, CodeStyle.getDefaultSettings().getLineSeparator()).
@@ -387,6 +391,7 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
   public Project createProject(String name, @NotNull String path) {
     Path baseDir = Paths.get(path);
     LOG.assertTrue(Files.isDirectory(baseDir));
+
     List<Path> children;
     try (DirectoryStream<Path> childrenIterator = Files.newDirectoryStream(baseDir)) {
       children = ContainerUtil.collect(childrenIterator.iterator());
@@ -397,7 +402,7 @@ public class ChiselTemplateModuleBuilder extends ModuleBuilder {
     boolean isSomehowOverwriting = children.size() > 1 ||
                                    (children.size() == 1 && !PathMacroUtil.DIRECTORY_STORE_NAME.equals(children.get(0).getFileName().toString()));
 
-    return ProgressManager.getInstance().run(new Task.WithResult<Project, RuntimeException>(null, "Applying Template", true) {
+    return ProgressManager.getInstance().run(new Task.WithResult<>(null, LangBundle.message("progress.title.applying.template"), true) {
       @Override
       public Project compute(@NotNull ProgressIndicator indicator) {
         try {
