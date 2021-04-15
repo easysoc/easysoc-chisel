@@ -45,6 +45,14 @@ patchPluginXml {
     untilBuild "211.*"
 }
 
+// https://docs.gradle.org/current/userguide/working_with_files.html
+task deployLauncher(type: Copy) {
+    from "tools/launcher/sbt-launch.jar"
+    into "${runIde.pluginsDirectory}/${project.name}/launcher"
+}
+// buildPlugin and runIde task depend on prepareSandbox
+prepareSandbox.finalizedBy(deployLauncher)
+
 buildSearchableOptions.onlyIf { false }
 jarSearchableOptions.onlyIf { false }
 
