@@ -3,8 +3,8 @@
 import chisel3._
 
 class ${NAME} extends MultiIOModule {
-  val input = IO(Input(UInt(16.W)))
-  val output = IO(Output(UInt(16.W)))
+  val in = IO(Input(UInt(16.W)))
+  val out = IO(Output(UInt(16.W)))
   #[[$END$]]#
 }
 

@@ -5,6 +5,7 @@ import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.ProjectBuilder;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.ide.util.projectWizard.WizardInputField;
+import com.intellij.openapi.application.ApplicationNamesInfo;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.platform.templates.ArchivedProjectTemplate;
 import com.intellij.platform.templates.ChiselTemplateModuleBuilder;
@@ -75,7 +76,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
       comboScalaVersions = new ComboBox(scalaVersions);
       comboScalaVersions.setPreferredSize(preferSize);
 
-      String[] sbtVersions = {"1.4.9", "1.3.10"};
+      String[] sbtVersions = {"1.5.0", "1.3.10"};
       comboSbtVersions = new ComboBox(sbtVersions);
       comboSbtVersions.setPreferredSize(preferSize);
 
@@ -141,9 +142,10 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
     myProperties.setProperty("CHISEL_VERSION", chiselVersion);
 
     myProperties.setProperty("TESTER2_VERSION", chiselVersion.endsWith("SNAPSHOT") ? "0.5-SNAPSHOT" : "0.3.+");
-    myProperties.setProperty("LAYERED_FIRRTL", "1.0.9");
+    myProperties.setProperty("LAYERED_FIRRTL", chiselVersion.endsWith("SNAPSHOT") ? "1.1-SNAPSHOT" : "1.1.+");
     myProperties.setProperty("CHISEL_35", chiselVersion.startsWith("3.5") ? "true" : "false");
     myProperties.setProperty("VERSION",versionField.getText());
+    myProperties.setProperty("PRODUCT", ApplicationNamesInfo.getInstance().getProductName());
 
     myWizardContext.putUserData(ChiselModuleType.EASYSOC_CHIP,myProperties);
 

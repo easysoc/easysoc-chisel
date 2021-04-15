@@ -4,10 +4,10 @@
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>Create Chisel Module from fileTemplates</li>
-            <li>Enable select SNAPSHOT version Chisel</li>
-            <li>Automatically set chiseltest version</li>
-            <li>Update <a href="https://github.com/easysoc/layered-firrtl">layered-firrtl</a> to version 1.0.9</li>
+            <li>The sbt version defaults to 1.5</li>
+            <li>Integrated sbt-launch.jar to improve the dependency download speed of new projects</li>
+            <li>Add tests for the classic GCD example</li>
+            <li>Change MultiIOModule template's port to in/out</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[
