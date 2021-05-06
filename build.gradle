@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '0.6.5'
+    id 'org.jetbrains.intellij' version '0.7.3'
 //    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
 }
 
@@ -12,13 +12,7 @@ repositories {
 }
 
 dependencies {
-//    implementation 'edu.berkeley.cs:firrtl_2.12:1.4.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-}
 
-test {
-    useJUnitPlatform()
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/

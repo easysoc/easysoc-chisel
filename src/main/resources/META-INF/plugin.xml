@@ -4,10 +4,8 @@
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>The sbt version defaults to 1.5</li>
-            <li>Integrated sbt-launch.jar to improve the dependency download speed of new projects</li>
-            <li>Add tests for the classic GCD example</li>
-            <li>Change MultiIOModule template's port to in/out</li>
+            <li>The sbt version defaults to 1.5.1</li>
+            <li>Support Scala 2.13 for the 3.5-SNAPSHOT version of the Chisel</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[

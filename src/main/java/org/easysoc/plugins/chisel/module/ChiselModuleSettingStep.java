@@ -72,11 +72,11 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
       comboChiselVersions = new ComboBox(chiselVersions);
       Dimension preferSize = comboChiselVersions.getPreferredSize();
 
-      String[] scalaVersions = {"2.12.13"};
+      String[] scalaVersions = {"2.12.13", "2.13.5"};
       comboScalaVersions = new ComboBox(scalaVersions);
       comboScalaVersions.setPreferredSize(preferSize);
 
-      String[] sbtVersions = {"1.5.0", "1.3.10"};
+      String[] sbtVersions = {"1.5.1", "1.3.10"};
       comboSbtVersions = new ComboBox(sbtVersions);
       comboSbtVersions.setPreferredSize(preferSize);
 
@@ -133,6 +133,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
   public void updateDataModel() {
 
     String chiselVersion = comboChiselVersions.getSelectedItem().toString();
+    String scalaVersion = comboScalaVersions.getSelectedItem().toString();
     myProperties = new Properties();
     myProperties.setProperty("USE_SBT_IMPORT",String.valueOf(sbtImport.isSelected()));
     myProperties.setProperty("USE_SBT_BUILD",String.valueOf(sbtBuild.isSelected()));
@@ -143,7 +144,8 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
 
     myProperties.setProperty("TESTER2_VERSION", chiselVersion.endsWith("SNAPSHOT") ? "0.5-SNAPSHOT" : "0.3.+");
     myProperties.setProperty("LAYERED_FIRRTL", chiselVersion.endsWith("SNAPSHOT") ? "1.1-SNAPSHOT" : "1.1.+");
-    myProperties.setProperty("CHISEL_35", chiselVersion.startsWith("3.5") ? "true" : "false");
+    myProperties.setProperty("CHISEL_34", chiselVersion.startsWith("3.4") ? "true" : "false");
+    myProperties.setProperty("SCALA_12", scalaVersion.startsWith("2.12") ? "true" : "false");
     myProperties.setProperty("VERSION",versionField.getText());
     myProperties.setProperty("PRODUCT", ApplicationNamesInfo.getInstance().getProductName());
 
