@@ -4,8 +4,8 @@
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>The sbt version defaults to 1.5.1</li>
-            <li>Support Scala 2.13 for the 3.5-SNAPSHOT version of the Chisel</li>
+            <li>The sbt version defaults to 1.5.2</li>
+            <li>Don't explicitly rely on the Scala plugin to avoid version conflicts</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[
@@ -16,7 +16,6 @@
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.java</depends>
-    <depends>org.intellij.scala</depends>
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
