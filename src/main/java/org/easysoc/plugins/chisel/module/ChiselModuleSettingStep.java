@@ -76,7 +76,7 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
       comboScalaVersions = new ComboBox(scalaVersions);
       comboScalaVersions.setPreferredSize(preferSize);
 
-      String[] sbtVersions = {"1.5.3"};
+      String[] sbtVersions = {"1.5.5"};
       comboSbtVersions = new ComboBox(sbtVersions);
       comboSbtVersions.setPreferredSize(preferSize);
 

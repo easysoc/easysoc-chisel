@@ -4,7 +4,7 @@
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>The sbt version defaults to 1.5.3</li>
+            <li>The sbt version defaults to 1.5.5</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[
