@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '1.1.4'
+    id 'org.jetbrains.intellij' version '1.5.1'
 }
 
 group 'org.easysoc'
@@ -17,26 +17,26 @@ dependencies {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     // version and localPath should not be specified at the same time
+    // version = '2021.3.3'
     localPath = "/home/itviewer/Downloads/software/idea-IC"
-
+    sandboxDir = "/home/itviewer/IdeaProjects/plugins-sandbox"
     // https://blog.jetbrains.com/platform/2019/06/java-functionality-extracted-as-a-plugin/
-    plugins = ['java'] //,'org.intellij.scala:2021.1.16'
-    downloadSources = false
+    plugins = ['java']
+    // downloadSources = false
 }
 
 runIde {
     // https://github.com/JetBrains/JetBrainsRuntime
-    jbrVersion = '11_0_11b1504.16'
     ideDir = project.file('/home/itviewer/Downloads/software/idea-IC')
 
-//    jvmArgs '-Didea.platform.prefix=Chip'
+    // jvmArgs '-Didea.platform.prefix=Chip'
     //for jbr11
     jvmArgs '--add-exports=java.base/jdk.internal.vm=ALL-UNNAMED','-Djdk.module.illegalAccess.silent=true'
 }
 
 patchPluginXml {
-    sinceBuild = '203'
-    untilBuild = '212.*'
+    sinceBuild = '213'
+    untilBuild = '221.*'
 }
 
 // https://docs.gradle.org/current/userguide/working_with_files.html
@@ -46,14 +46,7 @@ prepareSandbox {
     }
 }
 
-//task deployLauncher(type: Copy) {
-//    from "tools/launcher/sbt-launch.jar"
-//    into "${runIde.pluginsDir.get()}/${project.name}/launcher/"
-//}
-// buildPlugin and runIde task depend on prepareSandbox
-//prepareSandbox.finalizedBy(deployLauncher)
-
 buildSearchableOptions.onlyIf { false }
 jarSearchableOptions.onlyIf { false }
 
-//prepareSandbox.onlyIf { true }
+//prepareSandbox.onlyIf { false }

@@ -10,16 +10,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class CreateChiselModuleAction extends CreateFileFromTemplateAction implements DumbAware {
     public CreateChiselModuleAction() {
-        super("Chisel Module", "Create new Chisel module", Icons.Chisel);
+        super("Chisel Module", "Create new Chisel Module", Icons.Chisel);
     }
 
     @Override
     protected void buildDialog(@NotNull Project project, @NotNull PsiDirectory directory, CreateFileFromTemplateDialog.@NotNull Builder builder) {
-        builder
-                .setTitle("New Chisel Module")
+        builder.setTitle("New Chisel Module")
                 .addKind("Module", Icons.Chisel, "Chisel Module")
-                .addKind("RawModule", Icons.Chisel, "Chisel RawModule")
-                .addKind("MultiIOModule", Icons.Chisel, "Chisel MultiIOModule");
+                .addKind("MultiIO Module", Icons.Chisel, "Chisel MultiIO Module");
     }
 
     @Override

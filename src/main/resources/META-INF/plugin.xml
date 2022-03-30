@@ -4,7 +4,10 @@
     <vendor url="https://www.easysoc.org">EasySoC</vendor>
     <change-notes><![CDATA[
         <ul>
-            <li>The sbt version defaults to 1.5.5</li>
+            <li>Support IntelliJ 2021.3</li>
+            <li>File Templates for Chisel Test</li>
+            <li>Chisel version defaults to 3.5.+</li>
+            <li>Sbt version defaults to 1.5.8</li>
         </ul>
     ]]></change-notes>
     <description><![CDATA[
@@ -12,16 +15,15 @@
     Bringing Agile Hardware Development to the Masses.
     ]]></description>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
     <depends>com.intellij.java</depends>
     <depends>com.intellij.modules.platform</depends>
+    <depends>org.intellij.scala</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <internalFileTemplate name="Chisel Module"/>
-        <internalFileTemplate name="Chisel RawModule"/>
-        <internalFileTemplate name="Chisel MultiIOModule"/>
+        <internalFileTemplate name="Chisel MultiIO Module"/>
+        <internalFileTemplate name="Chisel Test"/>
 
         <moduleType id="CHISEL_MODULE" implementationClass="org.easysoc.plugins.chisel.module.ChiselModuleType"/>
         <projectTemplate projectType="CHISEL_MODULE" templatePath="projectTemplates/Empty_Chisel_Project.zip"/>
@@ -48,6 +50,9 @@
 
         <action id="CreateChiselModuleAction" class="org.easysoc.plugins.chisel.actions.CreateChiselModuleAction">
             <add-to-group group-id="NewGroup" anchor="first"/>
+        </action>
+        <action id="CreateChiselTestAction" class="org.easysoc.plugins.chisel.actions.CreateChiselTestAction">
+            <add-to-group group-id="NewGroup" anchor="after" relative-to-action="CreateChiselModuleAction"/>
         </action>
     </actions>
     <projectListeners>

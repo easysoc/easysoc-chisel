@@ -2,9 +2,9 @@
 #parse("File Header.java")
 import chisel3._
 
-class ${NAME} extends MultiIOModule {
-  val in = IO(Input(UInt(16.W)))
-  val out = IO(Output(UInt(16.W)))
+class ${NAME} extends Module {
+  val in = IO(Input(UInt(32.W)))
+  val out = IO(Output(UInt(32.W)))
   #[[$END$]]#
 }
 

@@ -6,6 +6,7 @@ import com.intellij.ide.util.projectWizard.ProjectBuilder;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.ide.util.projectWizard.WizardInputField;
 import com.intellij.openapi.application.ApplicationNamesInfo;
+import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.platform.templates.ArchivedProjectTemplate;
 import com.intellij.platform.templates.ChiselTemplateModuleBuilder;
@@ -18,6 +19,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
@@ -37,12 +39,10 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
   private WizardContext myWizardContext;
   private Properties myProperties;
 
-  private ComboBox comboSbtVersions;
   private ComboBox comboScalaVersions;
   private ComboBox comboChiselVersions;
   private JCheckBox sbtImport;
   private JCheckBox sbtBuild;
-  private JCheckBox buildGraph;
   private JTextField versionField;
 
   private JLabel labelChiselVersions;
@@ -66,34 +66,30 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
     if (sbtImport == null) {
       sbtImport = new JCheckBox("Use Sbt Shell For Import", settings.getBoolean(SBT_IMPORT,false));
       sbtBuild = new JCheckBox("Use Sbt Shell For Build", settings.getBoolean(SBT_BUILD,false));
-      buildGraph = new JCheckBox("Use layered-firrtl to generate graph files for circuit visualization", true);
 
-      String[] chiselVersions = {"3.4.+", "3.5-SNAPSHOT"};
+      String[] chiselVersions = {"3.5.+"};
       comboChiselVersions = new ComboBox(chiselVersions);
       Dimension preferSize = comboChiselVersions.getPreferredSize();
 
-      String[] scalaVersions = {"2.12.13", "2.13.6"};
+      // https://search.maven.org/artifact/edu.berkeley.cs/chisel3_2.12
+      // https://search.maven.org/artifact/edu.berkeley.cs/chisel3_2.13
+      // https://github.com/chipsalliance/chisel3/blob/master/build.sbt
+      // https://github.com/scala/scala/releases, minor releases is binary-compatible, we align with chisel
+      String[] scalaVersions = {"2.13.6", "2.12.15"};
       comboScalaVersions = new ComboBox(scalaVersions);
       comboScalaVersions.setPreferredSize(preferSize);
-
-      String[] sbtVersions = {"1.5.5"};
-      comboSbtVersions = new ComboBox(sbtVersions);
-      comboSbtVersions.setPreferredSize(preferSize);
 
       versionField = new JTextField("1.0.0");
       versionField.setPreferredSize(preferSize);
 
       addSettingsComponent(sbtImport);
       addSettingsComponent(sbtBuild);
-      addSettingsComponent(buildGraph);
 
-      addSettingsField("Sbt Version:",comboSbtVersions);
       addSettingsField("Scala Version:",comboScalaVersions);
       labelChiselVersions = addSettingsField("Chisel Version:",comboChiselVersions);
       addSettingsField("Version:", versionField);
     }
 
-    buildGraph.setVisible(notEmptyScalaProject);
     labelChiselVersions.setVisible(notEmptyScalaProject);
     comboChiselVersions.setVisible(notEmptyScalaProject);
   }
@@ -137,17 +133,18 @@ public class ChiselModuleSettingStep extends ModuleWizardStep {
     myProperties = new Properties();
     myProperties.setProperty("USE_SBT_IMPORT",String.valueOf(sbtImport.isSelected()));
     myProperties.setProperty("USE_SBT_BUILD",String.valueOf(sbtBuild.isSelected()));
-    myProperties.setProperty("BUILD_GRAPH",String.valueOf(buildGraph.isSelected()));
-    myProperties.setProperty("SBT_VERSION",comboSbtVersions.getSelectedItem().toString());
-    myProperties.setProperty("SCALA_VERSION",comboScalaVersions.getSelectedItem().toString());
+    // https://github.com/chipsalliance/chisel3/pull/2450
+    myProperties.setProperty("SBT_VERSION", "1.5.8");
+    myProperties.setProperty("SCALA_VERSION",scalaVersion);
     myProperties.setProperty("CHISEL_VERSION", chiselVersion);
 
-    myProperties.setProperty("TESTER2_VERSION", chiselVersion.endsWith("SNAPSHOT") ? "0.5-SNAPSHOT" : "0.3.+");
-    myProperties.setProperty("LAYERED_FIRRTL", chiselVersion.endsWith("SNAPSHOT") ? "1.1-SNAPSHOT" : "1.1.+");
-    myProperties.setProperty("CHISEL_34", chiselVersion.startsWith("3.4") ? "true" : "false");
+    myProperties.setProperty("TEST_VERSION", "0.5.+");
     myProperties.setProperty("SCALA_12", scalaVersion.startsWith("2.12") ? "true" : "false");
     myProperties.setProperty("VERSION",versionField.getText());
-    myProperties.setProperty("PRODUCT", ApplicationNamesInfo.getInstance().getProductName());
+
+    String preinstalled = new File(PathManager.getPreInstalledPluginsPath() + "/easysoc-chisel").exists() ? "true" : "false";
+    myProperties.setProperty("PREINSTALLED", preinstalled);
+//    myProperties.setProperty("PRODUCT", ApplicationNamesInfo.getInstance().getProductName());
 
     myWizardContext.putUserData(ChiselModuleType.EASYSOC_CHIP,myProperties);
 

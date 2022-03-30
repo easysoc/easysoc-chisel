@@ -1,0 +1,16 @@
+#if ((${PACKAGE_NAME} && ${PACKAGE_NAME} != ""))package ${PACKAGE_NAME} #end
+#parse("File Header.java")
+import chiseltest._
+import org.scalatest.flatspec.AnyFlatSpec
+
+class ${NAME}Test extends AnyFlatSpec with ChiselScalatestTester {
+  behavior of "${NAME}"
+  
+  it should "succeed" in {
+    test(new ${NAME}) { c =>
+      // test body
+      #[[$END$]]#
+    }
+  }
+}
+

@@ -2,6 +2,7 @@ package org.easysoc.plugins.chisel.module;
 
 import com.intellij.ide.projectWizard.NewProjectWizard;
 import com.intellij.ide.util.projectWizard.*;
+import com.intellij.ide.wizard.AbstractWizard;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.projectRoots.JavaSdk;
@@ -75,8 +76,10 @@ public class ChiselModuleBuilder extends ModuleBuilder {
         // will call this method after click Next button
         @Override
         public void updateDataModel() {
-          NewProjectWizard myWizard = (NewProjectWizard)context.getWizard();
-          myWizard.doCancelAction();
+          NewProjectWizard myWizard = (NewProjectWizard)context.getUserData(AbstractWizard.KEY);
+          if (myWizard != null) {
+            myWizard.doCancelAction();
+          }
         }
       };
     }
